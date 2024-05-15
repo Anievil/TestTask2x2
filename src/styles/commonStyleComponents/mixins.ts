@@ -84,7 +84,6 @@ export const borderMixin: CSSProp = css<BorderMixinProps>`
   ${({borderLeftWidth}) =>
     borderLeftWidth ? `border-left-width: ${borderLeftWidth}` : ''};
   ${({borderStyle}) => (borderStyle ? `border-style: ${borderStyle}` : '')};
-  ${({borderRadius}) => (borderRadius ? `border-radius: ${borderRadius}` : '')};
   ${({borderTopRightRadius}) =>
     borderTopRightRadius
       ? `border-top-right-radius: ${borderTopRightRadius}`

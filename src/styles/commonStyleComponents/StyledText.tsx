@@ -1,4 +1,6 @@
-import styled from 'styled-components/native';
+import styled, {IStyledComponent} from 'styled-components/native';
+import { TextProps } from 'react-native';
+import {StyledComponentProps} from '../../interfaces/mixinInterfaces';
 import {
   sizesMixin,
   textMixin,
@@ -9,7 +11,14 @@ import {
   positionMixin,
 } from './mixins';
 
-const StyledText = styled.Text`
+interface StyledTextProps
+  extends TextProps,
+  StyledComponentProps {}
+
+const StyledText: IStyledComponent<
+"native",
+StyledTextProps
+> = styled.Text`
   ${sizesMixin}
   ${marginMixin}
     ${paddingMixin}
