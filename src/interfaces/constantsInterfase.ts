@@ -7,6 +7,9 @@ export interface colorProps {
   grayTextColor: string;
   headerColorText: string;
   timeTextColor: string;
+  textConteinerColor: string;
+  deleteButtonColor: string;
+  longButtonColor: string;
 }
 
 export interface fontsProps {

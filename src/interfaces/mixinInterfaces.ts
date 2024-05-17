@@ -65,7 +65,7 @@ export interface SizesMixinProps {
 
 export interface ShadowMixinProps {
   boxShadow?: string;
-  elevation?: string;
+  elevation?: number;
   shadowColor?: string;
   shadow?: string;
   shadowOffset?: {width: string; height: string};
@@ -92,12 +92,12 @@ export interface PositionMixinProps {
   right?: string;
   top?: string;
   bottom?: string;
-  zIndex?: string;
+  zIndex?: number;
 }
 
 export interface ViewBoxMixinProps {
   backgroundColor?: string;
-  opacity?: string;
+  opacity?: number;
   overflow?: string;
   transform?: string;
 }
