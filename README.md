@@ -31,5 +31,5 @@ or run from Android Studio
 
 If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
 
-## [My CV]('https://drive.google.com/file/d/1I0RhshcCN-mZ-7T002kTu7AKRXb5DufT/view?usp=sharing')
+ [My CV]('https://drive.google.com/file/d/1I0RhshcCN-mZ-7T002kTu7AKRXb5DufT/view?usp=sharing')
 ## [Telegram]('https://t.me/Bazylevskyi_Oleksii')
