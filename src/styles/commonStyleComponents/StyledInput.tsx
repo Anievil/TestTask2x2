@@ -7,6 +7,7 @@ import {
   paddingMixin,
   viewBoxMixin,
   borderMixin,
+  textMixin,
 } from './mixins';
 
 interface StyledInputProps
@@ -22,6 +23,7 @@ const StyledInput: IStyledComponent<
     ${paddingMixin}
     ${viewBoxMixin}
     ${borderMixin}
+    ${textMixin}
 `;
 
 export default StyledInput;

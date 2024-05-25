@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "174982182702",
+    "project_id": "test2x2-f01c6",
+    "storage_bucket": "test2x2-f01c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:174982182702:android:d3f4df08b2c8dbebf02cbf",
+        "android_client_info": {
+          "package_name": "com.test_task_for_2x2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFWAYfKiodwoWJD9EDQJ8aqBAzWxCWyKU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

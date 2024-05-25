@@ -48,3 +48,5 @@ export const MyTheme = {
 
 export const windowWidth: number = Dimensions.get('window').width;
 export const windowHeight: number = Dimensions.get('window').height;
+
+export const defaultImgUrl: string = 'https://s3-alpha-sig.figma.com/img/75a4/05fa/f002f29b525831aebc083a3a3d76c40e?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ZWD6At5GPNszUfzlZLWCHebKGWWeQjlxxQ-iYhPzEEKbgKzVnTbpW7txHQrapAvLbhkEvkReh7sx7Ix0Dbcqy4lOl93-wT7VwEni7wKQNitSaZb9EL0T5-OdSVTVY~mjQcsPzTqvq-su7FJxWP5NFNfxcYpzxB4LGRX17SOVwPMK~ZK4sdjhgyQ~CArS96WclqHlN4Fn8IvhbAi6hpoFIqXTmLLNZByH4~JNNB727gd46ArXfoQikubgrF0eLRd3LGFKa6bSkRJYvdagXkqLGqeHjKmQKMR3aimDQ3e3KFqNDUM~MXZYY5fw~EIjPWnY-zxsGzIuK6OSacEic7mqsA__'

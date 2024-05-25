@@ -1,9 +1,17 @@
 import React, {useEffect, useState} from 'react';
+import moment from 'moment';
+
 import {StyledText} from '../../styles';
 import {color, fonts} from '../../constants';
 import {TextComponentProps} from '../../interfaces/commonComponents';
 
-const UnitifatedText: React.FC<TextComponentProps> = ({text, textType, margin}) => {
+const UnitifatedText: React.FC<TextComponentProps> = ({
+  text,
+  textType,
+  margin,
+  date,
+  isPostScreen
+}) => {
   const [textColor, setColor] = useState<string>(color.black);
   const [fontSize, setFontSize] = useState<string>('');
   const [fontFamily, setFontFamily] = useState<string>('');
@@ -45,8 +53,10 @@ const UnitifatedText: React.FC<TextComponentProps> = ({text, textType, margin}) 
       mr={margin?.mr || '0px'}
       ml={margin?.ml || '0px'}
       fontSize={fontSize}
+      numberOfLines={isPostScreen ? undefined : 1}
       lineHeight={lineHeight}>
-      {text}
+        {text}
+        {date && (isPostScreen ? moment(date).format('dddd, D MMM YYYY. kk:mm') : moment(date).fromNow())}
     </StyledText>
   );
 };

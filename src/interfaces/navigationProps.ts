@@ -2,7 +2,7 @@ import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 
 export type RootStackParamList = {
   Home: undefined;
-  PostScreen: {textTitle: string};
+  PostScreen: {textTitle: string; url: string; date: number; text: string};
   CreatePost: undefined;
 };
 

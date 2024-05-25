@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useCallback} from 'react';
+import {Keyboard} from 'react-native';
 import {StyledView} from '../../styles';
 import {color} from '../../constants';
 import {NavButtonComponentProps} from '../../interfaces/commonComponents';
@@ -9,8 +10,15 @@ const NavButton: React.FC<NavButtonComponentProps> = ({
   onPressButton,
   ml = '10px',
 }) => {
+  const handlePress = useCallback(() => {
+    if (Keyboard.isVisible()) {
+      Keyboard.dismiss();
+    }
+    onPressButton();
+  }, []);
+
   return (
-    <TouchableOpacity onPress={onPressButton}>
+    <TouchableOpacity onPress={handlePress}>
       <StyledView
         ml={ml}
         padding="8px"

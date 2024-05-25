@@ -1,75 +1,69 @@
 import React, {useCallback, useRef, useState} from 'react';
-import {FlatList, ListRenderItem, StyleSheet} from 'react-native';
-import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
+import {FlatList, ListRenderItem} from 'react-native';
+import BottomSheet, {BottomSheetMethods} from '@devvie/bottom-sheet';
 
 import {ICNoResult} from '../../../assets';
 import {color, windowHeight, windowWidth} from '../../constants';
 import {HomeScreenProps} from '../../interfaces/navigationProps';
 import {StyledText, StyledView} from '../../styles';
 import {BottomSheetBlock, NewsItemCard, SearchBar} from './components';
-
-const itemList: {id: number; text: string}[] = [
-  {id: 0, text: 'Discovery by scientists 1'},
-  {id: 1, text: 'Discovery by scientists 2'},
-  {id: 2, text: 'Discovery by scientists 3'},
-];
+import {usePostStore} from '../../zustand';
+import {PostsProps} from '../../interfaces/dataInterfase';
+import {useFirestoreData} from '../../customHooks';
 
 const Home: React.FC<HomeScreenProps> = () => {
-  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [curtrentModalId, setCurtrentModalId] = useState<number | null>(null);
+  const [curtrentModalId, setCurtrentModalId] = useState<string>('');
+  const bottomSheetRef = useRef<BottomSheetMethods>(null);
 
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const {posts} = usePostStore();
+  const {getAllData, isRefreshing} = useFirestoreData();
 
-  const openModal = useCallback((id: number) => {
-    if (bottomSheetRef?.current?.snapToIndex) {
-      bottomSheetRef.current.snapToIndex(0);
-      setCurtrentModalId(id);
+  const openModal = useCallback((id: string) => {
+    if (bottomSheetRef?.current?.open) {
+      bottomSheetRef.current.open();
       setIsModalOpen(true);
+      setCurtrentModalId(id);
     }
   }, []);
 
   const onCloseModal = useCallback(() => {
     if (isModalOpen === true) {
       setIsModalOpen(false);
-      setCurtrentModalId(null);
+      setCurtrentModalId('');
     }
   }, [isModalOpen]);
-
-  const renderNewsList: ListRenderItem<{id: number; text: string}> =
-    useCallback(
-      ({item: {text, id}}) => (
-        <NewsItemCard textTitle={text} id={id} openModal={openModal} />
-      ),
-      [itemList],
-    );
-
-  const keyExtractor = useCallback(
-    (item: {id: number; text: string}) => item.id.toString(),
-    [],
+  const renderNewsList: ListRenderItem<PostsProps> = useCallback(
+    ({item: {text, id, title, url, date}}) => (
+      <NewsItemCard
+        title={title}
+        url={url}
+        date={date}
+        text={text}
+        id={id}
+        openModal={openModal}
+      />
+    ),
+    [posts],
   );
 
-  const refreshList = useCallback(() => {
-    setIsRefreshing(true);
-    setTimeout(() => setIsRefreshing(false), 1000);
-  }, []);
+  const keyExtractor = useCallback((item: PostsProps) => item.id, [posts]);
 
   return (
-    <StyledView ph="30px">
+    <StyledView ph="30px" flex={1}>
       <SearchBar />
-      {itemList.length ? (
         <FlatList
-          style={{marginTop: 118}}
-          data={itemList}
+          data={posts}
+          showsVerticalScrollIndicator={false}
           keyExtractor={keyExtractor}
           renderItem={renderNewsList}
-          onRefresh={refreshList}
+          onRefresh={getAllData}
           refreshing={isRefreshing}
         />
-      ) : (
+      {posts.length === 0 && (
         <StyledView
-          zIndex={-1}
           position="absolute"
+          zIndex={-1}
           width={windowWidth + 'px'}
           height={windowHeight + 'px'}
           alignItems="center"
@@ -84,6 +78,7 @@ const Home: React.FC<HomeScreenProps> = () => {
           </StyledText>
         </StyledView>
       )}
+
       {isModalOpen && (
         <StyledView
           backgroundColor={color.black}
@@ -94,7 +89,6 @@ const Home: React.FC<HomeScreenProps> = () => {
           height={windowHeight + 'px'}
         />
       )}
-
       <BottomSheetBlock
         bottomSheetRef={bottomSheetRef}
         onCloseModal={onCloseModal}

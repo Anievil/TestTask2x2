@@ -1,17 +1,23 @@
 import React, {useCallback} from 'react';
-import BottomSheet from '@gorhom/bottom-sheet';
+import BottomSheet, {BottomSheetMethods} from '@devvie/bottom-sheet';
 import {StyledView} from '../../../../styles';
 
 import {LongButton} from '../../../../commonComponents';
 import {BottomSheetBlockProps} from '../../../../interfaces/screenProps';
+import {useFirestoreData} from '../../../../customHooks';
+import { color } from '../../../../constants';
 
 const BottomSheetBlock: React.FC<BottomSheetBlockProps> = ({
   onCloseModal,
   bottomSheetRef,
   curtrentModalId,
 }) => {
+  const {deletePost} = useFirestoreData();
   const onPressDelete = useCallback(() => {
-    console.log(curtrentModalId, 'curtrentModalId');
+    deletePost(curtrentModalId);
+    if (bottomSheetRef?.current?.close) {
+      bottomSheetRef.current.close();
+    }
   }, [curtrentModalId]);
 
   const onPressClose = useCallback(() => {
@@ -22,16 +28,16 @@ const BottomSheetBlock: React.FC<BottomSheetBlockProps> = ({
 
   return (
     <BottomSheet
-      snapPoints={[226]}
-      index={-1}
-      handleStyle={{paddingTop: 15, paddingBottom: 35}}
-      handleIndicatorStyle={{
+      height={226}
+      closeOnDragDown
+      style={{paddingTop: 15}}
+      dragHandleStyle={{
+        marginTop: -5,
         width: 35,
-        backgroundColor: '#8E949A',
+        backgroundColor: color.placehlderColor,
         opacity: 0.3,
       }}
-      onAnimate={onCloseModal}
-      enablePanDownToClose
+      onClose={onCloseModal}
       ref={bottomSheetRef}>
       <StyledView ph="34px">
         <LongButton text="Delete" isDelete onPress={onPressDelete} />

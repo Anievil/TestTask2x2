@@ -3,23 +3,25 @@ import {useNavigation} from '@react-navigation/native';
 
 import {ICPlus, ICSearch} from '../../../../../assets';
 import {StyledInput, StyledView} from '../../../../styles';
-import {color, windowWidth} from '../../../../constants';
+import {color} from '../../../../constants';
 import {NavButton} from '../../../../commonComponents';
 import {HomeNavigationProps} from '../../../../interfaces/navigationProps';
+import {useFirestoreData} from '../../../../customHooks';
 
 const SearchBar: React.FC = () => {
   const navigation = useNavigation<HomeNavigationProps>();
+  const {getAllData} = useFirestoreData();
+
   const createNewNews = useCallback(() => {
     navigation.navigate('CreatePost');
   }, []);
 
+  const search = useCallback((event: {nativeEvent: {text: string}}) => {
+    getAllData(event.nativeEvent.text);
+  }, []);
+
   return (
-    <StyledView
-      flexDirection="row"
-      position="absolute"
-      width={windowWidth + 'px'}
-      ph="30px"
-      pt="30px">
+    <StyledView flexDirection="row" pv="30px">
       <StyledView
         backgroundColor={color.searchBackground}
         alignItems="center"
@@ -32,6 +34,8 @@ const SearchBar: React.FC = () => {
           placeholderTextColor={color.placehlderColor}
           placeholder="Search"
           flex={1}
+          color={color.black}
+          onChange={search}
           br="10px"
           ml="10px"
         />
