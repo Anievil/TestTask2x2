@@ -1,5 +1,8 @@
 This is a test [**React Native**](https://reactnative.dev) project on android, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
+### [My CV](https://drive.google.com/file/d/1I0RhshcCN-mZ-7T002kTu7AKRXb5DufT/view?usp=sharing)
+### [Telegram](https://t.me/Bazylevskyi_Oleksii)
+
 # Getting Started
 Project started on Node.js v21.1.0
 
@@ -8,13 +11,13 @@ Project started on Node.js v21.1.0
 ```bash
 npm i --legacy-peer-deps
 ```
-## Step 1: Start the Metro Server
+## Step 2: Start the Metro Server
 
 ```bash
 npm start
 ```
 
-## Step 2: Start your Application
+## Step 3: Start your Application
 
 Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
 
@@ -30,6 +33,3 @@ or run from Android Studio
 - press run app button (Shift + F10)
 
 If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-## [My CV]('https://drive.google.com/file/d/1I0RhshcCN-mZ-7T002kTu7AKRXb5DufT/view?usp=sharing')
-## [Telegram]('https://t.me/Bazylevskyi_Oleksii')
