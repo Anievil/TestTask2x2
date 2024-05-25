@@ -69,7 +69,7 @@ const useFirestoreData = () => {
             },
           );
           updatePostsList(
-            postsList.filter(post => post.title.includes(searchedText)),
+            postsList.filter(post => post.title.includes(searchedText) || post.text.includes(searchedText)),
           );
           setIsRefreshing(false);
         },
