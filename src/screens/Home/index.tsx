@@ -1,6 +1,11 @@
-import React, {useCallback, useRef, useState} from 'react';
-import {FlatList, ListRenderItem} from 'react-native';
-import BottomSheet, {BottomSheetMethods} from '@devvie/bottom-sheet';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
+import {
+  FlatList,
+  KeyboardAvoidingView,
+  ListRenderItem,
+  Platform,
+} from 'react-native';
+import {BottomSheetMethods} from '@devvie/bottom-sheet';
 
 import {ICNoResult} from '../../../assets';
 import {color, windowHeight, windowWidth} from '../../constants';
@@ -10,6 +15,7 @@ import {BottomSheetBlock, NewsItemCard, SearchBar} from './components';
 import {usePostStore} from '../../zustand';
 import {PostsProps} from '../../interfaces/dataInterfase';
 import {useFirestoreData} from '../../customHooks';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const Home: React.FC<HomeScreenProps> = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -49,17 +55,36 @@ const Home: React.FC<HomeScreenProps> = () => {
 
   const keyExtractor = useCallback((item: PostsProps) => item.id, [posts]);
 
+  const FlatListRender = useMemo(
+    () => (
+      <FlatList
+        data={posts}
+        style={{marginBottom: Platform.OS === 'ios' ? 50 : 0}}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={keyExtractor}
+        renderItem={renderNewsList}
+        onRefresh={getAllData}
+        refreshing={isRefreshing}
+      />
+    ),
+    [
+      posts,
+      isRefreshing,
+      getAllData,
+      renderNewsList,
+      keyExtractor,
+    ],
+  );
+
   return (
-    <StyledView ph="30px" flex={1}>
+    <SafeAreaView style={{paddingHorizontal: 30, flex: 1}}>
       <SearchBar />
-        <FlatList
-          data={posts}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={keyExtractor}
-          renderItem={renderNewsList}
-          onRefresh={getAllData}
-          refreshing={isRefreshing}
-        />
+      {Platform.OS === 'ios' ? (
+        <KeyboardAvoidingView behavior={'height'} children={FlatListRender} />
+      ) : (
+        FlatListRender
+      )}
+
       {posts.length === 0 && (
         <StyledView
           position="absolute"
@@ -94,7 +119,7 @@ const Home: React.FC<HomeScreenProps> = () => {
         onCloseModal={onCloseModal}
         curtrentModalId={curtrentModalId}
       />
-    </StyledView>
+    </SafeAreaView>
   );
 };
 

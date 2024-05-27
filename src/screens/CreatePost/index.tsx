@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 import {useForm, Controller} from 'react-hook-form';
-import {Keyboard} from 'react-native';
+import {Keyboard, Platform} from 'react-native';
 
 import {StyledView, StyledScrollView} from '../../styles';
 import {FormDataProps} from '../../interfaces/screenProps';
@@ -9,7 +9,8 @@ import {LongButton} from '../../commonComponents';
 import {KeyboardAvoidingView} from 'react-native';
 import {useFirestoreData} from '../../customHooks';
 import {CreatePostScreenProps} from '../../interfaces/navigationProps';
-import { windowHeight } from '../../constants';
+import {windowHeight} from '../../constants';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const CreatePost: React.FC<CreatePostScreenProps> = ({navigation}) => {
   const {
@@ -37,78 +38,90 @@ const CreatePost: React.FC<CreatePostScreenProps> = ({navigation}) => {
     });
     navigation.canGoBack() && navigation.goBack();
   }, []);
+  const insets = useSafeAreaInsets();
 
   return (
-    <KeyboardAvoidingView behavior={'height'} keyboardVerticalOffset={90}>
-      <StyledScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{minHeight: windowHeight - 90, justifyContent: 'space-between'}}>
-        <StyledView ph="30px" pt="20px" flex={1}>
-          <Controller
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({field: {onChange, onBlur, value}}) => (
-              <InputField
-                placeholder="Title*"
-                onBlur={onBlur}
-                onChange={onChange}
-                value={value}
-              />
-            )}
-            name="title"
-          />
-          <Controller
-            control={control}
-            render={({field: {onChange, onBlur, value}}) => (
-              <InputField
-                placeholder="Image url"
-                onBlur={onBlur}
-                onChange={onChange}
-                value={value}
-              />
-            )}
-            name="url"
-          />
-          <Controller
-            control={control}
-            render={({field: {onChange, onBlur, value}}) => (
-              <InputField
-                placeholder="Link"
-                onBlur={onBlur}
-                onChange={onChange}
-                value={value}
-              />
-            )}
-            name="link"
-          />
-          <Controller
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({field: {onChange, onBlur, value}}) => (
-              <InputField
-                placeholder="Type your message here...*"
-                onBlur={onBlur}
-                onChange={onChange}
-                value={value}
-                isTextArea
-              />
-            )}
-            name="text"
-          />
-        </StyledView>
-        <StyledView mb="50px" ph="30px">
-          <LongButton
-            text="Public"
-            isDisabled={!isValid}
-            onPress={handleSubmit(onSubmit)}
-          />
-        </StyledView>
-      </StyledScrollView>
-    </KeyboardAvoidingView>
+    <SafeAreaView>
+      <KeyboardAvoidingView
+        behavior={'height'}
+        keyboardVerticalOffset={90}
+        style={{marginTop: Platform.OS === 'ios' ? -insets.top : 0}}>
+        <StyledScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{
+            minHeight:
+              Platform.OS === 'ios'
+                ? windowHeight - 140 - insets.top
+                : windowHeight - 90,
+            justifyContent: 'space-between',
+          }}>
+          <StyledView ph="30px" pt="20px" flex={1}>
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <InputField
+                  placeholder="Title*"
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  value={value}
+                />
+              )}
+              name="title"
+            />
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <InputField
+                  placeholder="Image url"
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  value={value}
+                />
+              )}
+              name="url"
+            />
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <InputField
+                  placeholder="Link"
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  value={value}
+                />
+              )}
+              name="link"
+            />
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({field: {onChange, onBlur, value}}) => (
+                <InputField
+                  placeholder="Type your message here...*"
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  value={value}
+                  isTextArea
+                />
+              )}
+              name="text"
+            />
+          </StyledView>
+          <StyledView mb={Platform.OS === 'ios' ? '0px' : '50px'} ph="30px">
+            <LongButton
+              text="Public"
+              isDisabled={!isValid}
+              onPress={handleSubmit(onSubmit)}
+            />
+          </StyledView>
+        </StyledScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

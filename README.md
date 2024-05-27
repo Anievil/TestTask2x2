@@ -10,6 +10,7 @@ Project started on Node.js v21.1.0
 
 ```bash
 npm i --legacy-peer-deps
+cd ios && pod install
 ```
 ## Step 2: Start the Metro Server
 
@@ -32,4 +33,14 @@ or run from Android Studio
 - open android folder from Android Studio
 - press run app button (Shift + F10)
 
+### For IOS
+
+```bash
+npm run ios
+```
+
+or run from Xcode
+
+
 If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+
