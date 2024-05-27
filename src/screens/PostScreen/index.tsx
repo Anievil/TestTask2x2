@@ -3,16 +3,19 @@ import {UnitifatedText} from '../../commonComponents';
 import {color, windowWidth} from '../../constants';
 import {StyledImage, StyledView, StyledScrollView} from '../../styles';
 import {PostScreenProps} from '../../interfaces/navigationProps';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const PostScreen: React.FC<PostScreenProps> = ({route}) => {
   const {text, date, url} = route.params;
+  const insets = useSafeAreaInsets()
 
   return (
-    <StyledView flex={1}>
+    <SafeAreaView style={{flex:1}}>
+    <StyledView flex={1} mt={-insets.top + 'px'}>
       <StyledImage
         position="absolute"
         src={url}
-        width={windowWidth + 'px'}
+        width={windowWidth+ 'px'}
         height="50%"
       />
       <StyledView
@@ -37,6 +40,7 @@ const PostScreen: React.FC<PostScreenProps> = ({route}) => {
         </StyledScrollView>
       </StyledView>
     </StyledView>
+    </SafeAreaView>
   );
 };
 
