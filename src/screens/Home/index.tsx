@@ -1,24 +1,29 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { FlatList, KeyboardAvoidingView, ListRenderItem } from 'react-native';
-import BottomSheet, { BottomSheetMethods } from '@devvie/bottom-sheet';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
+import {
+  FlatList,
+  KeyboardAvoidingView,
+  ListRenderItem,
+  Platform,
+} from 'react-native';
+import {BottomSheetMethods} from '@devvie/bottom-sheet';
 
-import { ICNoResult } from '../../../assets';
-import { color, windowHeight, windowWidth } from '../../constants';
-import { HomeScreenProps } from '../../interfaces/navigationProps';
-import { StyledText, StyledView } from '../../styles';
-import { BottomSheetBlock, NewsItemCard, SearchBar } from './components';
-import { usePostStore } from '../../zustand';
-import { PostsProps } from '../../interfaces/dataInterfase';
-import { useFirestoreData } from '../../customHooks';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {ICNoResult} from '../../../assets';
+import {color, windowHeight, windowWidth} from '../../constants';
+import {HomeScreenProps} from '../../interfaces/navigationProps';
+import {StyledText, StyledView} from '../../styles';
+import {BottomSheetBlock, NewsItemCard, SearchBar} from './components';
+import {usePostStore} from '../../zustand';
+import {PostsProps} from '../../interfaces/dataInterfase';
+import {useFirestoreData} from '../../customHooks';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const Home: React.FC<HomeScreenProps> = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [curtrentModalId, setCurtrentModalId] = useState<string>('');
   const bottomSheetRef = useRef<BottomSheetMethods>(null);
 
-  const { posts } = usePostStore();
-  const { getAllData, isRefreshing } = useFirestoreData();
+  const {posts} = usePostStore();
+  const {getAllData, isRefreshing} = useFirestoreData();
 
   const openModal = useCallback((id: string) => {
     if (bottomSheetRef?.current?.open) {
@@ -35,7 +40,7 @@ const Home: React.FC<HomeScreenProps> = () => {
     }
   }, [isModalOpen]);
   const renderNewsList: ListRenderItem<PostsProps> = useCallback(
-    ({ item: { text, id, title, url, date } }) => (
+    ({item: {text, id, title, url, date}}) => (
       <NewsItemCard
         title={title}
         url={url}
@@ -50,56 +55,71 @@ const Home: React.FC<HomeScreenProps> = () => {
 
   const keyExtractor = useCallback((item: PostsProps) => item.id, [posts]);
 
-  return (
-      <SafeAreaView style={{paddingHorizontal: 30, flex: 1}}>
-        <SearchBar />
-        <KeyboardAvoidingView behavior='height'>
-        <FlatList
-          data={posts}
-          style={{marginBottom: 50}}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={keyExtractor}
-          renderItem={renderNewsList}
-          onRefresh={getAllData}
-          refreshing={isRefreshing}
-        />
-        </KeyboardAvoidingView>
-        
-        {posts.length === 0 && (
-          <StyledView
-            position="absolute"
-            zIndex={-1}
-            width={windowWidth + 'px'}
-            height={windowHeight + 'px'}
-            alignItems="center"
-            justifyContent="center">
-            <ICNoResult />
-            <StyledText
-              color={color.grayTextColor}
-              fontFamily="Roboto-Regular"
-              mt="29px"
-              fontSize="16px">
-              No results found
-            </StyledText>
-          </StyledView>
-        )}
+  const FlatListRender = useMemo(
+    () => (
+      <FlatList
+        data={posts}
+        style={{marginBottom: Platform.OS === 'ios' ? 50 : 0}}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={keyExtractor}
+        renderItem={renderNewsList}
+        onRefresh={getAllData}
+        refreshing={isRefreshing}
+      />
+    ),
+    [
+      posts,
+      isRefreshing,
+      getAllData,
+      renderNewsList,
+      keyExtractor,
+    ],
+  );
 
-        {isModalOpen && (
-          <StyledView
-            backgroundColor={color.black}
-            opacity={0.4}
-            position="absolute"
-            zIndex={0}
-            width={windowWidth + 'px'}
-            height={windowHeight + 'px'}
-          />
-        )}
-        <BottomSheetBlock
-          bottomSheetRef={bottomSheetRef}
-          onCloseModal={onCloseModal}
-          curtrentModalId={curtrentModalId}
+  return (
+    <SafeAreaView style={{paddingHorizontal: 30, flex: 1}}>
+      <SearchBar />
+      {Platform.OS === 'ios' ? (
+        <KeyboardAvoidingView behavior={'height'} children={FlatListRender} />
+      ) : (
+        FlatListRender
+      )}
+
+      {posts.length === 0 && (
+        <StyledView
+          position="absolute"
+          zIndex={-1}
+          width={windowWidth + 'px'}
+          height={windowHeight + 'px'}
+          alignItems="center"
+          justifyContent="center">
+          <ICNoResult />
+          <StyledText
+            color={color.grayTextColor}
+            fontFamily="Roboto-Regular"
+            mt="29px"
+            fontSize="16px">
+            No results found
+          </StyledText>
+        </StyledView>
+      )}
+
+      {isModalOpen && (
+        <StyledView
+          backgroundColor={color.black}
+          opacity={0.4}
+          position="absolute"
+          zIndex={0}
+          width={windowWidth + 'px'}
+          height={windowHeight + 'px'}
         />
-      </SafeAreaView>
+      )}
+      <BottomSheetBlock
+        bottomSheetRef={bottomSheetRef}
+        onCloseModal={onCloseModal}
+        curtrentModalId={curtrentModalId}
+      />
+    </SafeAreaView>
   );
 };
 
